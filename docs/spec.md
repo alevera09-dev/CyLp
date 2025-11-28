@@ -4,6 +4,8 @@
 
 **Propósito:** Definir el diseño del núcleo del lenguaje: sintaxis esencial, semántica, modelo de tipos, memoria y runtime mínimo necesario para ejecutar programas simples.
 **Alcance v1:** variables, expresiones, condiciones, loops, funciones, estructuras de datos (arrays, tuples, diccionarios, strings), módulos, ejecución interpretada/bytecode simple. Objetos y OOP quedan para ramificaciones.
+**Nombre clave** es CyLp un nombre temporal mientras desarrollo el lenguaje y cuando lo termine pondre nombre oficial y extension(talvez icono)
+
 
 ## 2. Filosofía y objetivos
 
@@ -33,12 +35,12 @@
 
 * Tokens principales:
 
-  * `IDENTIFIER` : [A-Za-z0-9_]
+  * `IDENTIFIER` : `[A-Za-z0-9_]`
   * `NUMBER` : enteros y flotantes
   * `STRING` : delimitadores `"..."` (escapes básicos)
-  * `KEYWORDS` : [if, elif, else, switch, case, while, for, lambda, func, do, return, 
-                  mode, dynamic, str, int, float, bool, array, dict,
-                  tuple, true, false, null, and, or, not]
+  * `KEYWORDS` : `[if, elif, else, switch, case, while, for, lambda, func, do, return,` 
+                  `mode, dynamic, str, int, float, bool, array, dict,`
+                  `tuple, true, false, null, and, or, not]`
 
   * Operadores: `+ - * ** / % == != < <= > >= and or not =`
   * Delimitadores: `; , ( ) { } [ ] .`

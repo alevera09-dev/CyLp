@@ -201,9 +201,9 @@ def lexer(code:str) -> list:
             temporal_string = code[start_pos:index]
             if "\\n" in temporal_string:
                 temporal_string = temporal_string.replace("\\n", "\n")
-            elif "\\t" in temporal_string:
+            if "\\t" in temporal_string:
                 temporal_string = temporal_string.replace("\\t", "\t")
-            elif "\\\\" in temporal_string:
+            if "\\\\" in temporal_string:
                 temporal_string = temporal_string.replace("\\\\", "\\")
                 
             temporal_string = temporal_string[1:-1]
@@ -288,4 +288,6 @@ Prototipo 6.5(porque solo hice pequeños cambios)
     1. Arregle el error de identacion
     2. Modifica la logica de el identificador de strings
     3. agruege unas palabras claves coo mode, null, etc.
+    
+    #Prototipo de lexer terminado!!!
 """
