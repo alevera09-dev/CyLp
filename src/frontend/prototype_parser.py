@@ -1,77 +1,136 @@
-class NumberNode:
-    #Atributos
+class Node:
+    def __repr__():
+        return f"<{__class__.__name__}>"
+    
+    def evaluate(self):
+        raise NotImplementedError
+
+    def pretty_print(self):
+        return str(self.evaluate())
+    
+
+class NumberNode(Node):
     def __init__(self, value:int | float):
         self.value = value
         
-    def __str__(self):
-        return f"{self.value}"
-        
-class BinaryOpNode:
+    def __repr__(self):
+        return f"<{__class__.__name__} value={self.value}>"
+    
+    def evaluate(self) -> int|float:
+        if self.value is None:
+            raise ValueError("ValueError: Se esperaba un valor valido")
+        return self.value
+
+    def pretty_print(self):
+        return str(self.value)  
+    
+     
+class BinaryOpNode(Node):
     #Atributos
-    def __init__(self,  left:int|float, operator:str, right:int|float):
+    def __init__(self, left:Node, operator:str, right:Node):
         self.left = left
         self.operator = operator
         self.right = right
+        
+    def __repr__(self):
+        return f"<{__class__.__name__} left={self.left} operator={self.operator} right={self.right}>"
+        
+    def evaluate(self) -> int|float:
+        left = self.left.evaluate()
+        right = self.right.evaluate()
+        operator = self.operator
+        
+        if operator == '+':
+            return left + right
+        elif operator == '-':
+            return left - right
+        elif operator == '*':
+            return left * right
+        elif operator == '/':
+            if right == 0:
+                raise ZeroDivisionError("No se puede dividir por cero")
+            return left / right
+        else:
+            raise ValueError("Se esperaba operador valido(+, -, * o /)")
+        
+    def pretty_print(self):
+        left_str = self.left.pretty_print()
+        right_str = self.right.pretty_print()
+        
+        if isinstance(self.left, BinaryOpNode) and self.operator in ['*', '/'] and self.left.operator in ['+', '-']:
+             left_str = f"({left_str})"
+             
+        if isinstance(self.right, BinaryOpNode) and self.operator in ['*', '/'] and self.right.operator in ['+', '-']:
+             right_str = f"({right_str})"
+
+        return f"{left_str} {self.operator} {right_str}"
+    
+
+class UnaryNode(Node):
+    def __init__(self, operator:str, node: Node):
+        self.operator = operator
+        self.node = node
+        
+    def __repr__(self):
+        return f"<{__class__.__name__} operator={self.operator} value={self.node}>"
+
+    def evaluate(self) -> int|float:
+        if self.operator != '-':
+            raise ValueError("UnaryError: Se esperaba un operador valido.")
+        return -self.node.evaluate()
+    
+    def pretty_print(self):
+        child_str = self.node.pretty_print()
+        if isinstance(self.node, (BinaryOpNode, UnaryNode)):
+            child_str = f"({child_str})"
+        return f"{self.operator}{child_str}"
+
 
 class Parser:
-    #Atributos
-    def __init__(self, tokens_array: list):
-        self.tokens_array = tokens_array
-        self.index = 0
-        self.length_array_tokens = len(tokens_array)
+    EXPR = ['PLUS',
+            'MINUS']
     
-    #Metodos
-    def eat(self, expected_token:str | None):
-        if expected_token == self.tokens_array[self.index][0]:
-            self.index += 1
-        else:
-            print(f"ERROR: SE ESPERABA UN {self.tokens_array[self.index][1]}")
-            
-    def factor(self, value:int | float):
-        return NumberNode(value)
-
+    TERM = ['STAR',
+            'SLASH']
+    
+    def __init__(self, tokens:list):
+        self.tokens = tokens
+        self.index = 0
+        self.current_token = self.tokens[self.index]
+    
+    
+    def eat(self):
+        self.index += 1
+        self.current_token = self.tokens[self.index]
+    
+    
+    def factor(self):
+        node = NumberNode(self.current_token[1])
+        self.eat()
+        return node
+    
     def term(self):
-        if self.tokens_array[self.index][0] == "NUMBER":
-            left = self.factor(self.tokens_array[self.index][1])
-            self.eat(self.tokens_array[self.index][0])
+        node = self.factor()
+        
+        while self.current_token[0] in self.TERM:
+            op = self.current_token[1]
+            self.eat()
+            right = self.factor()
+            node = BinaryOpNode(node, op, right)
             
-            if self.tokens_array[self.index][0] in ["STAR", "SLASH"]:
-                operador = self.tokens_array[self.index][1]
-                self.eat(self.tokens_array[self.index][0])
-                right = self.factor(self.tokens_array[self.index][1])
-                
-                binary_op_node = BinaryOpNode(left, operador, right)
-
-                return binary_op_node
+        return node
     
     def expr(self):
-        while self.index < self.length_array_tokens:
-            if self.tokens_array[self.index][0] == "NUMBER":
-                left = self.factor(self.tokens_array[self.index][1])
-                self.eat("NUMBER")
-                
-            if self.tokens_array[self.index][0] in ['PLUS', 'MINUS']:
-                operator = self.tokens_array[self.index][1]
-                self.eat(self.tokens_array[self.index][0])
-                right = self.term()
-
-                root_node = BinaryOpNode(left, operator, right)
-
-                return root_node
-
-    def print_ast(self, root_node: BinaryOpNode):
-        print("\t\t", root_node.operator)
-        print("\n\t", root_node.left, end = "")
-        print("\t\t", root_node.right.operator)
-        print("\n\t\t  ", root_node.right.left, end = "")
-        print("\t\t", root_node.right.right)
+        node = self.term()
+        
+        while self.current_token[0] in self.EXPR:
+            op = self.current_token[1]
+            self.eat()
+            right = self.term()            
+            node = BinaryOpNode(node, op, right)
+            
+        return node
     
-    
-parser = Parser([("NUMBER", 5), ("PLUS", '+'), ("NUMBER", 3), ("STAR", '*'), ("NUMBER", 2)])
-root_node = parser.expr()
-print(parser.print_ast(root_node))
-
-
 """
 Prototipo 1.
 
