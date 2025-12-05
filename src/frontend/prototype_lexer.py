@@ -1,218 +1,293 @@
-def lexer(code:str) -> list:
-    tokens_array = []
-    index = 0
-    keywords = {
-        "if" : "IF",
-        "elif" : "ELIF",
-        "else" : "ELSE",
-        "switch" : "SWITCH",
-        "case" : "CASE",
-        "for" : "FOR",
-        "while" : "WHILE",
-        "do" : "DO",
-        "dynamic" : "DYNAMIC",
-        "int" : "INT",
-        "float" : "FLOAT",
-        "bool" : "BOOL",
-        "str" : "STR",
-        "char" : "CHAR",
-        "array" : "ARRAY",
-        "tuple" : "TUPLE",
-        "set" : "SET",
-        "dict" : "DICT",
-        "func" : "FUNC",
-        "return" : "RETURN",
-        "lambda" : "LAMBDA",
-        "or" : "OR",
-        "and" : "AND",
-        "not" : "NOT",
-        "null" : "NULL",
-        "mode" : "MODE"
-    }
-    line_length = len(code)
-    
-    while index < line_length:
-        
-        #Es un espacio 
-        if code[index] == ' ':
-            index += 1
-            continue
-        
-        #Logica para dentificar semicolon            
-        if code[index] == ";":
-            tokens_array.append(("SEMICOLON", ";"))
-            index += 1
-            continue
-        
-        #Logica para identificar colon
-        if code[index] == ':':
-            tokens_array.append(("COLON", ":"))
-            index += 1
-            continue
-        
-        #Logica para identificar parentesis, brackets y curly braces
-        if code[index] == '(':
-            tokens_array.append(("LPAREN", f"{code[index]}"))
-            index += 1
-            continue
-        
-        if code[index] == ')':
-            tokens_array.append(("RPAREN", f"{code[index]}"))
-            index += 1
-            continue
-        
-        if code[index] == "[":
-            tokens_array.append(("LBRACKET", f"{code[index]}"))
-            index += 1
-            continue
-        
-        if code[index] == "]":
-            tokens_array.append(("RBRACKET", f"{code[index]}"))
-            index += 1
-            continue
-        
-        if code[index] == "{":
-            tokens_array.append(("LBRACE", f"{code[index]}"))
-            index += 1
-            continue
-        
-        if code[index] == "}":
-            tokens_array.append(("RBRACE", f"{code[index]}"))
-            index += 1
-            continue
-        
-        #Logica de identificador de signos aritmeticos
-        if code[index] == '+':
-            tokens_array.append(("PLUS", f"{code[index]}"))
-            index += 1
-            continue
-        
-        if code[index] == '-':
-            tokens_array.append(("MINUS", f"{code[index]}"))
-            index += 1
-            continue
-        
-        if code[index] == '*':
-            start_pos = index
-            while index < line_length and code[index] == '*':
-                index += 1
-            
-            temporal_sign = code[start_pos:index]
-            if temporal_sign == '*':
-                tokens_array.append(("STAR", f"{temporal_sign}"))
-            elif temporal_sign == "**":
-                tokens_array.append(("DOUBLE_STAR", f"{temporal_sign}"))
-            else:
-                print("ERROR EN SIGNO DE MULT, POW")      
-            continue
-        
-        if code[index] == '/':
-            tokens_array.append(("SLASH", f"{code[index]}"))
-            index += 1
-            continue
-        
-        if code[index] == '%':
-            tokens_array.append(("MOD", f"{code[index]}"))
-            index += 1
-            continue
-                 
-        #Logica de signo de asignacion o igual (=, ==)
-        if code[index] == '=':
-            start_pos = index
-            while index < line_length and code[index] == '=':
-                index += 1
-                
-            temporal_sign = code[start_pos:index]
-            if temporal_sign == '=':
-                tokens_array.append(("ASSIGN", "="))
-            elif temporal_sign == "==":
-                tokens_array.append(("EQUAL_EQUAL", "=="))    
-            else:
-                print("ERROR EN SIGNOS DE ASIGNACION Y COMPARCION") #Gemini este mensaje es para mi asi que no le prestees atencion
-            
-            continue
-                           
-        #Logica para identificar signos de comparacion a excepcion de ==
-        if code[index] in ['<', '>', '!']:
-            start_pos = index
-            while index < line_length and (code[index] in ['<', '>', '!'] or code[index] == '='):
-                index += 1
-                          
-            temporal_sign = code[start_pos:index]
-            if temporal_sign == '<':
-                tokens_array.append(("LESS", f"{temporal_sign}"))
-            elif temporal_sign == '>':
-                tokens_array.append(("GREATER", f"{temporal_sign}"))
-            elif temporal_sign == '>=':
-                tokens_array.append(("GREATER_EQUAL", f"{temporal_sign}"))
-            elif temporal_sign == '<=':
-                tokens_array.append(("LESS_EQUAL", f"{temporal_sign}"))
-            elif temporal_sign == '!=':
-                tokens_array.append(("BANG_EQUAL", f"{temporal_sign}"))
-            else:
-                print("ERROR EN SIGNOS DE COMPARASION") #Gemini este mensaje es para mi asi que no le prestees atencion
-            
-            continue
-                                          
-        #Logica para identificar identificadores de variables
-        if code[index].isalpha():
-            start_pos = index
-            
-            while index < line_length and (code[index].isalnum() or code[index] == '_'):
-                index += 1
-                
-            full_identifier = code[start_pos:index]
-            if full_identifier in keywords.keys():
-                tokens_array.append((f"{keywords[full_identifier]}",  f"{full_identifier}"))
-            else:
-                tokens_array.append(("IDENTIFIER",  f"{full_identifier}"))
-            continue
-            
-        #Logica para identificar numeros
-        if code[index].isdigit():
-            start_pos = index
-            while index < line_length and (code[index].isdigit() or code[index] == '.'):
-                index += 1
-                
-            numero_completo = code[start_pos:index]
-            if not '.' in numero_completo:
-                numero_completo = int(numero_completo)
-            else:
-                numero_completo = float(numero_completo)
-                
-            tokens_array.append(("NUMBER", numero_completo))
-            continue
-        
-        #Logica para identificador de strings
-        if code[index] == "\"" or code [index] == "\'":
-            start_pos = index
-            start_quotes = code[index]
-            index += 1
-            while index < line_length and code[index] != start_quotes:
-                if code[index] == "\\":
-                    index += 2
-                    if index >= line_length:
-                        print("ERROR DE STRING, talvez hiciste esto? = \\\" o \\' al final del string en vez de solo \" o ' ")
-                        break
-                                             
-                index += 1
-            
-            index += 1
-            temporal_string = code[start_pos:index]
-            if "\\n" in temporal_string:
-                temporal_string = temporal_string.replace("\\n", "\n")
-            if "\\t" in temporal_string:
-                temporal_string = temporal_string.replace("\\t", "\t")
-            if "\\\\" in temporal_string:
-                temporal_string = temporal_string.replace("\\\\", "\\")
-                
-            temporal_string = temporal_string[1:-1]
-            tokens_array.append(("STRING", f"{temporal_string}")) 
-                    
-            continue
-            
-    return tokens_array
+from enum import Enum, auto
 
+class TokenType(Enum):
+    IF = auto()
+    ELIF = auto()
+    ELSE = auto()
+    SWITCH = auto()
+    CASE = auto()
+    FOR = auto()
+    WHILE = auto()
+    DO = auto()
+    DYNAMIC = auto()
+    INT = auto()
+    FLOAT = auto()
+    BOOL = auto()
+    STR = auto()
+    PLUS = auto()
+    MINUS = auto()
+    MULT = auto()
+    POW = auto()
+    SLASH = auto()
+    SEMICOLON = auto()
+    COLON = auto()
+    LPAREN = auto()
+    RPAREN = auto()
+    LBRACKET = auto()
+    RBRACKET = auto()
+    LBRACE = auto()
+    RBRACE = auto()
+    ASSIGN = auto()
+    EQUAL_EQUAL = auto()
+    MOD = auto()
+    LESS = auto()
+    GREATER = auto()
+    LESS_EQUAL = auto()
+    GREATER_EQUAL = auto()
+    BANG_EQUAL = auto()
+    IDENT = auto()
+    NUMBER = auto()
+    STRING = auto()
+    NULL = auto()
+    AND = auto()
+    OR = auto()
+    NOT = auto()
+    NEWLINE = auto()
+    EOF = auto()
+    
+class Token:
+    def __init__(self, type:TokenType, value, col, line):
+        self.type = type
+        self.value = value
+        self.col = str(col)
+        self.line = str(line)
+        
+    def __repr__(self):
+        return f"{self.type}({self.value})"
+    
+    def __str__(self):
+        return f"Token de tipo {self.type} con un valor de {self.value} en la posision {self.col} col, {self.line} line"
+
+
+class Lexer:
+    keywords = {
+        "if":TokenType.IF,
+        "elif":TokenType.ELIF,
+        "else":TokenType.ELSE,
+        "switch":TokenType.SWITCH,
+        "case":TokenType.CASE,
+        "while":TokenType.WHILE,
+        "for":TokenType.FOR,
+        "do":TokenType.DO,
+        "dynamic":TokenType.DYNAMIC,
+        "int":TokenType.INT,
+        "float":TokenType.FLOAT,
+        "str":TokenType.STR,
+        "bool":TokenType.BOOL,
+        "null":TokenType.NULL,
+        "and":TokenType.AND,
+        "or":TokenType.OR,
+        "not":TokenType.NOT,
+    }
+    
+    def __init__(self, code):
+        self.code = code
+        self.position = 0
+        self.current_char = self.code[self.position]
+        self.tokens_array = []
+        self.code_length = len(self.code)
+        
+    def advance(self):
+        self.position += 1
+        if self.position < self.code_length:
+            self.current_char = self.code[self.position]
+        else:
+            self.current_char = None
+        
+    def _read_number(self):
+        #Logica para identificar numeros
+        start_pos = self.position
+        
+        while self.position < self.code_length and (self.current_char.isdigit() or self.current_char == '.'):
+            self.advance()
+         
+        numero_completo = self.code[start_pos:self.position]
+        if not '.' in numero_completo:
+            numero_completo = int(numero_completo)
+        else:
+            numero_completo = float(numero_completo)
+                
+        return Token(TokenType.NUMBER, numero_completo, self.position, 1)   #Digamos que es line 1 mientras tanto ya despues vere como calcular las lineas
+        
+    def _read_ident(self):
+        start_pos = self.position
+            
+        while self.position < self.code_length and (self.current_char.isalnum() or self.current_char == '_'):
+            self.advance()
+                
+        full_identifier = self.code[start_pos:self.position]
+        if full_identifier in self.keywords.keys():
+            return Token(self.keywords[full_identifier], full_identifier, self.position, 1)
+        else:
+            return Token(TokenType.IDENT, full_identifier, self.position, 1)
+    
+    def _read_string(self):
+        start_pos = self.position
+        start_quotes = self.current_char
+        self.advance()
+        while self.position < self.code_length and self.current_char != start_quotes:
+            if self.current_char == "\\":
+                self.advance()
+                self.advance()
+                if self.position >= self.code_length:
+                    raise SyntaxError("talvez hiciste esto? = \\\" o \\' al final del string en vez de solo \" o ' ")
+                                             
+            self.advance()
+            
+        self.advance()
+        temporal_string = self.code[start_pos:self.position]
+        if "\\n" in temporal_string:
+            temporal_string = temporal_string.replace("\\n", "\n")
+        if "\\t" in temporal_string:
+            temporal_string = temporal_string.replace("\\t", "\t")
+        if "\\\\" in temporal_string:
+            temporal_string = temporal_string.replace("\\\\", "\\")
+                
+        temporal_string = temporal_string[1:-1]
+        
+        return Token(TokenType.STRING, temporal_string, self.position, 1)
+
+    def _read_star(self):
+        start_pos = self.position
+        while self.position < self.code_length and self.current_char== '*':
+            self.advance()
+            
+        temporal_sign = self.code[start_pos:self.position]
+        if temporal_sign == '*':
+            token = Token(TokenType.MULT, '*', self.position, 1)
+        elif temporal_sign == "**":
+            token = Token(TokenType.POW, '**', self.position, 1)
+        else:
+            raise SyntaxError("talvez quisiste poner * o **?")      
+        return token
+
+    def _read_equal(self):
+        start_pos = self.position
+        while self.position < self.code_length and self.current_char == '=':
+            self.advance()
+                
+        temporal_sign = self.code[start_pos:self.position]
+        if temporal_sign == '=':
+            token = Token(TokenType.ASSIGN, '=', self.position, 1)
+        elif temporal_sign == "==":
+            token = Token(TokenType.EQUAL_EQUAL, "==", self.position, 1)  
+        else:
+            raise SyntaxError("Talvez quisiste decir = o ==?")
+        return token        
+    
+    def _read_comparison(self):
+        start_pos = self.position
+        while self.position < self.code_length and (self.current_char in ['<', '>', '!'] or self.current_char == '='):
+            self.advance()
+                          
+        temporal_sign = self.code[start_pos:self.position]
+        if temporal_sign == '<':
+            token = Token(TokenType.LESS, '<', self.position, 1)
+        elif temporal_sign == '>':
+            token = Token(TokenType.GREATER, '>', self.position, 1)
+        elif temporal_sign == '>=':
+            token = Token(TokenType.GREATER_EQUAL, ">=", self.position, 1)
+        elif temporal_sign == '<=':
+            token = Token(TokenType.LESS_EQUAL, "<=", self.position, 1)
+        elif temporal_sign == '!=':
+            token = Token(TokenType.BANG_EQUAL, "!=", self.position, 1)
+        else:
+            raise SyntaxError("Talvez quisiste decir >, >=, <, <= o !=?")
+        return token
+            
+    def get_tokens(self):
+        while self.position < self.code_length:
+            
+            #Semicolon and Colon
+            if self.current_char.isspace():
+                self.advance()
+            elif self.current_char == ";":
+                token = Token(TokenType.SEMICOLON, ';', self.position, 1)
+                self.tokens_array.append(token)
+                self.position += 1
+            elif self.current_char == ':':
+                token = Token(TokenType.COLON, ':', self.position, 1)
+                self.tokens_array.append(token)
+                self.advance()
+                
+            #Parenthesis, Brackets and Braces
+            elif self.current_char == '(':
+                token = Token(TokenType.LPAREN, '(', self.position, 1)
+                self.tokens_array.append(token)
+                self.advance()
+            elif self.current_char == ')':
+                token = Token(TokenType.RPAREN, ')', self.position, 1)
+                self.tokens_array.append(token)
+                self.advance()
+            elif self.current_char == "[":
+                token = Token(TokenType.LBRACKET, '[', self.position, 1)
+                self.tokens_array.append(token)
+                self.advance()
+            elif self.current_char == "]":
+                token = Token(TokenType.RBRACKET, ']', self.position, 1)
+                self.tokens_array.append(token)
+                self.advance()
+            elif self.current_char == "{":
+                token = Token(TokenType.LBRACE, '{', self.position, 1)
+                self.tokens_array.append(token)
+                self.advance()
+            elif self.current_char == "}":
+                token = Token(TokenType.RBRACE, '}', self.position, 1)
+                self.tokens_array.append(token)
+                self.advance()
+                
+            #Aritmethic Operators
+            elif self.current_char == '+':
+                token = Token(TokenType.PLUS, '+', self.position, 1)
+                self.tokens_array.append(token)
+                self.advance()
+            elif self.current_char == '-':
+                token = Token(TokenType.MINUS, '-', self.position, 1)
+                self.tokens_array.append(token)
+                self.advance()
+            elif self.current_char == '*':
+                token = self._read_star()
+                self.tokens_array.append(token)
+            elif self.current_char == '/':
+                token = Token(TokenType.SLASH, '/', self.position, 1)
+                self.tokens_array.append(token)
+                self.advance()
+            elif self.current_char == '%':
+                token = Token(TokenType.MOD, '%', self.position, 1)
+                self.tokens_array.append(token)
+            
+            #Assign sign and Equal sign
+            elif self.current_char == '=':
+                token = self._read_equal()
+                self.tokens_array.append(token)
+            
+            #Comparison signs, except equal
+            elif self.current_char in ['<', '>', '!']:
+                token = self._read_comparison()
+                self.tokens_array.append(token)
+            
+            #Strings
+            elif self.current_char.isdigit():
+                token = self._read_number()
+                self.tokens_array.append(token)
+            
+            #Identifiers and Keywords
+            elif self.current_char.isalpha():
+                token = self._read_ident()
+                self.tokens_array.append(token)
+                
+            #Numbers
+            elif self.current_char == "\"" or self.current_char == "\'":
+                token = self._read_string()
+                self.tokens_array.append(token)
+
+        self.tokens_array.append(Token(TokenType.EOF, None, self.position, 1))
+        return self.tokens_array
+
+
+lexer = Lexer("int suma = 10 + 5;")
+print(lexer.get_tokens())  
+              
 
 """
 prototipo 4 mañana parche de errores de indice, cambio de logica.
@@ -290,4 +365,15 @@ Prototipo 6.5(porque solo hice pequeños cambios)
     3. agruege unas palabras claves coo mode, null, etc.
     
     #Prototipo de lexer terminado!!!
+"""
+"""
+Prototipo 7 Totalmente actualizado y cambiado
+
+    1.Logica pasada de una gran funcion a clases
+    2. Clase TokenType para los tipos de token con libreria enum
+    3. clase Token con atributos esenciales como Literal Value, TokenType, col y line(para ubicacion)
+    4. clase lexer que es donde se hace magia, con la logica de def lexer pero con cosas cambiadas,
+        como aumento de indice y current_char en metodo a parte, lectura de diferentes char refactorizado en diferentes metodos
+        nuevos errores de sintaxis agregados con raise
+         
 """

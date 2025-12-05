@@ -143,4 +143,10 @@ cosas a arreglar:
     2. modifique todo esto que me dio dolor de cabeza !!!, dure horas para entenderlo, aunque
     este primer vistaso es mas lineal de lo que me gustaria el lexer no lo hice a la primera asi
     que espero que para al menos el prototipo 5 sea un parser decente
+    
+Prototipo 2.
+
+cosas que agregue:
+
+    1.cambie toda la logica de el parser, y agruege nodos genericos.
 """
