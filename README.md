@@ -1,84 +1,84 @@
-🌀 CyLp — Proyecto Personal de Aprendizaje
+🌀 CyLp — Personal Learning Project
 
-Bienvenido a CyLp, un proyecto que estoy construyendo por pasión, por práctica y porque quiero aprender cómo funciona un lenguaje por dentro.
+Welcome to CyLp, a project I'm building out of passion, practice, and a desire to understand how a programming language works on the inside.
 
-Este repositorio contiene el lexer, parser, AST, y próximamente el intérprete/VM.
-Todavía es un trabajo en progreso, pero cualquier persona es bienvenida a verlo, aprender conmigo o dar ideas.
+This repository contains the lexer, parser, AST, and soon the interpreter/VM. It’s still a work in progress, but anyone is welcome to take a look, learn with me, or share ideas.
 
-Cuidado! -> El nombre actual es un nombre clave por ahora, pero cuando tenga un nivel decente lo cambiare a uno que piense mejor o lo piense
-con la comunidad si es que llego a tener.
+Warning! → The current name is just a codename. Once the project reaches a decent level, I’ll rename it to something better — either something I come up with or something chosen together with the community (if I ever get one!).
 
-Cual es un nivel decente?: Que haga lo mas basico que puede hacer un lenguaje, tener variables, hacer operaciones aritmeticas, logicas, de comparacion,
-condicionales y bucles, luego de eso espero ponerle funciones entre otras cosas para pulirlo
+What’s a “decent level”?
+When the language can do the basic essentials: variables, arithmetic operations, logic, comparisons, conditionals, and loops. After that, I want to add functions and other features to polish it.
 
-¿Qué es este lenguaje?
+❓ What is this language?
 
-Es un lenguaje híbrido entre C y Python, combinando:
+It’s a hybrid between C and Python, combining:
 
-Sintaxis con { } y ; inspirada en C
+C-style { } and ; syntax
 
-Funciones simples estilo Python como print()
+Simple Python-like functions such as print()
 
-Tipado estático con opción dynamic para más flexibilidad
+Static typing with a dynamic type for flexibility
 
-Ideas modernas como inferencia de tipo y un modo prototipo
+Modern ideas like type inference and a prototype mode
 
-Mi objetivo no es reemplazar a ningún lenguaje:
+My goal is not to replace any language:
 
-👉 Solo quiero aprender, mejorar y divertirme construyendo algo real.
+👉 I just want to learn, improve, and have fun building something real.
 
-Características planeadas
+🚧 Planned Features
 
-Lexer básico - Listo pero siempre dispuesto a actualizarlo si se puede mejorar
+Basic lexer — Done, but always open to improvements
 
-Parser con nodos AST - en desarrollo
+Parser with AST nodes — In progress
 
-Tipos básicos (int, float, string, bool) - futuro
+Basic types (int, float, string, bool) — Coming soon
 
-Tipo dynamic - futuro
+dynamic type — Future
 
-Funciones y bloques {} - futuro
+Functions and {} blocks — Future
 
-Librería estándar mínima (print, input, range) - futuro
+Minimal standard library (print, input, range) — Future
 
-Control de flujo (if, while, for) - futuro
+Control flow (if, while, for) — Future
 
-Intérprete o máquina virtual - futuro
+Interpreter or virtual machine — Future
 
-Y mucho mas!!!
+And much more!!!
 
-Ejemplo de cómo se verá(O espero que se vea):
-from stdmath import fact
+✨ Example of how it might look (or how I hope it will):
+ from stdmath import fact
 
-int main() 
-{
-    int num = input("Digita un numero: "); #Planeo que el parser convierta el tipo de dato entrante con el que se espera como en este caso int
+int main() {
+    int num = input("Enter a number: ");
+    // I plan for the parser to automatically convert the input to the expected type (int in this case)
     print("Factorial:", fact(num));
     return 0;
 }
 
-No se si soy un viejo dentro de un cuerpo joven pero me encanta algunas cosas de la sintaxis de c como {} para bloques, semicolons, me parece mas legible a mis ojos aunque python no esta mal
-y de hecho es mi lenguaje principal por asi decirlo ya que empece a aprender con el.
 
-Otra cosa que debo decir es que por el momento estoy haciendo el prototipo del lenguaje en mi querido python pero luego lo rehare en mi nuevo amor C, si quieres ver el progreso mira la carpeta /src
+I don’t know if I’m an old man in a young body, but I really love some parts of C’s syntax: {} for blocks, semicolons… it just feels more readable to me.
+Python isn’t bad at all—in fact it’s my main language since it’s the one I started with—but C’s style has a special charm.
 
-🙌 Contribuciones
+Another thing worth mentioning: for now I’m building the prototype of the language in my beloved Python, but later I will rebuild it in my new love, C.
+If you want to follow the progress, check the /src folder.
 
-Soy novato y estoy aprendiendo, así que:
+🙌 Contributions
 
-👉 Cualquier aporte es bienvenido
-👉 Si ves un error, por favor abre un issue
-👉 Si tienes una idea, déjala en Discussions o Issues
+I’m a beginner and I’m learning, so:
 
-No necesitas experiencia para contribuir:
-si quieres aprender sobre compiladores, este repo es un buen lugar para jugar
+👉 Any contribution is welcome
+👉 If you see a bug, please open an issue
+👉 If you have an idea, share it in Discussions or Issues
 
-⭐ Por qué hago esto
+You don’t need experience to contribute:
+if you want to learn about compilers, this repo is a fun place to experiment.
 
-Para aprender C y Python más profundamente
+⭐ Why I'm doing this
 
-Para practicar estructuras como AST, parsing y tipos
+To learn C and Python more deeply
 
-Para entender cómo funciona un lenguaje detrás de escena
+To practice structures like ASTs, parsing, and type systems
 
-Porque me apasiona la programación
+To understand how a language works behind the scenes
+
+Because I’m passionate about programming
