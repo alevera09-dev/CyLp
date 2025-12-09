@@ -1,4 +1,5 @@
 from enum import Enum, auto
+from system_errors import ErrorReporter, LexerError
 
 class TokenType(Enum):
     IF = auto()
@@ -8,7 +9,7 @@ class TokenType(Enum):
     CASE = auto()
     FOR = auto()
     WHILE = auto()
-    DO = auto()
+    FUNC = auto()
     DYNAMIC = auto()
     INT = auto()
     FLOAT = auto()
@@ -58,7 +59,6 @@ class Token:
     def __str__(self):
         return f"Token de tipo {self.type} con un valor de {self.value} en la posision {self.col} col, {self.line} line"
 
-
 class Lexer:
     keywords = {
         "if":TokenType.IF,
@@ -68,7 +68,7 @@ class Lexer:
         "case":TokenType.CASE,
         "while":TokenType.WHILE,
         "for":TokenType.FOR,
-        "do":TokenType.DO,
+        "func":TokenType.FUNC,
         "dynamic":TokenType.DYNAMIC,
         "int":TokenType.INT,
         "float":TokenType.FLOAT,
@@ -80,15 +80,24 @@ class Lexer:
         "not":TokenType.NOT,
     }
     
-    def __init__(self, code):
-        self.code = code
-        self.position = 0
-        self.current_char = self.code[self.position]
-        self.tokens_array = []
-        self.code_length = len(self.code)
+    def __init__(self, code:str, error_reporter:ErrorReporter):
+        self.code: str = code
+        self.error_reporter : ErrorReporter = error_reporter
+        self.position: int = 0
+        self.column: int = 0
+        self.line: int = 1
+        self.current_char: str = self.code[self.position] if code else None
+        self.tokens_array: list = [] 
+        self.code_length: int = len(self.code)
         
     def advance(self):
         self.position += 1
+        self.column += 1
+        
+        if self.current_char == '\n':
+            self.column = 0
+            self.line += 1
+            
         if self.position < self.code_length:
             self.current_char = self.code[self.position]
         else:
@@ -107,7 +116,7 @@ class Lexer:
         else:
             numero_completo = float(numero_completo)
                 
-        return Token(TokenType.NUMBER, numero_completo, self.position, 1)   #Digamos que es line 1 mientras tanto ya despues vere como calcular las lineas
+        return Token(TokenType.NUMBER, numero_completo, self.column, self.line)   #Digamos que es line 1 mientras tanto ya despues vere como calcular las lineas
         
     def _read_ident(self):
         start_pos = self.position
@@ -119,7 +128,7 @@ class Lexer:
         if full_identifier in self.keywords.keys():
             return Token(self.keywords[full_identifier], full_identifier, self.position, 1)
         else:
-            return Token(TokenType.IDENT, full_identifier, self.position, 1)
+            return Token(TokenType.IDENT, full_identifier, self.column, self.line)
     
     def _read_string(self):
         start_pos = self.position
@@ -129,13 +138,18 @@ class Lexer:
             if self.current_char == "\\":
                 self.advance()
                 self.advance()
-                if self.position >= self.code_length:
-                    raise SyntaxError("talvez hiciste esto? = \\\" o \\' al final del string en vez de solo \" o ' ")
+                if self.position >= self.code_length or self.current_char == ';':
+                    self.error_reporter.add_error(LexerError("Strange character", self.line, self.column, bad_char=f"\\{start_quotes}"))
+                    
+                    return None
+                    
                                              
             self.advance()
             
         self.advance()
         temporal_string = self.code[start_pos:self.position]
+        if not temporal_string[0] == start_quotes and temporal_string[-1] == start_quotes:
+            self.logger.log("ERROR", f"A closing quotation mark is missing: {start_quotes}")
         if "\\n" in temporal_string:
             temporal_string = temporal_string.replace("\\n", "\n")
         if "\\t" in temporal_string:
@@ -145,7 +159,7 @@ class Lexer:
                 
         temporal_string = temporal_string[1:-1]
         
-        return Token(TokenType.STRING, temporal_string, self.position, 1)
+        return Token(TokenType.STRING, temporal_string, self.column, self.line)
 
     def _read_star(self):
         start_pos = self.position
@@ -154,25 +168,27 @@ class Lexer:
             
         temporal_sign = self.code[start_pos:self.position]
         if temporal_sign == '*':
-            token = Token(TokenType.MULT, '*', self.position, 1)
+            token = Token(TokenType.MULT, '*', self.column, self.line)
         elif temporal_sign == "**":
-            token = Token(TokenType.POW, '**', self.position, 1)
+            token = Token(TokenType.POW, '**', self.column, self.line)
         else:
-            raise SyntaxError("talvez quisiste poner * o **?")      
+            self.error_reporter.add_error(LexerError("Strange character", self.line, self.column, bad_char=temporal_sign))
+            return None   
         return token
 
     def _read_equal(self):
         start_pos = self.position
-        while self.position < self.code_length and self.current_char == '=':
+        while self.position < self.code_length and self.current_char == "=":
             self.advance()
                 
         temporal_sign = self.code[start_pos:self.position]
         if temporal_sign == '=':
-            token = Token(TokenType.ASSIGN, '=', self.position, 1)
+            token = Token(TokenType.ASSIGN, '=', self.column, self.line)
         elif temporal_sign == "==":
-            token = Token(TokenType.EQUAL_EQUAL, "==", self.position, 1)  
+            token = Token(TokenType.EQUAL_EQUAL, "==", self.column, self.line)  
         else:
-            raise SyntaxError("Talvez quisiste decir = o ==?")
+            self.error_reporter.add_error(LexerError("Strange character", self.line, self.column, bad_char=temporal_sign))
+            return None
         return token        
     
     def _read_comparison(self):
@@ -182,78 +198,84 @@ class Lexer:
                           
         temporal_sign = self.code[start_pos:self.position]
         if temporal_sign == '<':
-            token = Token(TokenType.LESS, '<', self.position, 1)
+            token = Token(TokenType.LESS, '<', self.column, self.line)
         elif temporal_sign == '>':
-            token = Token(TokenType.GREATER, '>', self.position, 1)
+            token = Token(TokenType.GREATER, '>', self.column, self.line)
         elif temporal_sign == '>=':
-            token = Token(TokenType.GREATER_EQUAL, ">=", self.position, 1)
+            token = Token(TokenType.GREATER_EQUAL, ">=", self.column, self.line)
         elif temporal_sign == '<=':
-            token = Token(TokenType.LESS_EQUAL, "<=", self.position, 1)
+            token = Token(TokenType.LESS_EQUAL, "<=", self.column, self.line)
         elif temporal_sign == '!=':
-            token = Token(TokenType.BANG_EQUAL, "!=", self.position, 1)
+            token = Token(TokenType.BANG_EQUAL, "!=", self.column, self.line)
         else:
-            raise SyntaxError("Talvez quisiste decir >, >=, <, <= o !=?")
+            self.error_reporter.add_error(LexerError("Strange character", self.line, self.column, bad_char=temporal_sign))
+            return None
         return token
             
     def get_tokens(self):
         while self.position < self.code_length:
             
-            #Semicolon and Colon
+            #Whitespaces and newlines
             if self.current_char.isspace():
+                if self.current_char == '\n':
+                    token = Token(TokenType.NEWLINE, '\\n', self.column, self.line)
+                    self.tokens_array.append(token)
                 self.advance()
+                    
+            #Semicolon and Colon
             elif self.current_char == ";":
-                token = Token(TokenType.SEMICOLON, ';', self.position, 1)
+                token = Token(TokenType.SEMICOLON, ';', self.column, self.line)
                 self.tokens_array.append(token)
-                self.position += 1
+                self.advance()
             elif self.current_char == ':':
-                token = Token(TokenType.COLON, ':', self.position, 1)
+                token = Token(TokenType.COLON, ':', self.column, self.line)
                 self.tokens_array.append(token)
                 self.advance()
                 
             #Parenthesis, Brackets and Braces
             elif self.current_char == '(':
-                token = Token(TokenType.LPAREN, '(', self.position, 1)
+                token = Token(TokenType.LPAREN, '(', self.column, self.line)
                 self.tokens_array.append(token)
                 self.advance()
             elif self.current_char == ')':
-                token = Token(TokenType.RPAREN, ')', self.position, 1)
+                token = Token(TokenType.RPAREN, ')', self.column, self.line)
                 self.tokens_array.append(token)
                 self.advance()
             elif self.current_char == "[":
-                token = Token(TokenType.LBRACKET, '[', self.position, 1)
+                token = Token(TokenType.LBRACKET, '[', self.column, self.line)
                 self.tokens_array.append(token)
                 self.advance()
             elif self.current_char == "]":
-                token = Token(TokenType.RBRACKET, ']', self.position, 1)
+                token = Token(TokenType.RBRACKET, ']', self.column, self.line)
                 self.tokens_array.append(token)
                 self.advance()
             elif self.current_char == "{":
-                token = Token(TokenType.LBRACE, '{', self.position, 1)
+                token = Token(TokenType.LBRACE, '{', self.column, self.line)
                 self.tokens_array.append(token)
                 self.advance()
             elif self.current_char == "}":
-                token = Token(TokenType.RBRACE, '}', self.position, 1)
+                token = Token(TokenType.RBRACE, '}', self.column, self.line)
                 self.tokens_array.append(token)
                 self.advance()
                 
             #Aritmethic Operators
             elif self.current_char == '+':
-                token = Token(TokenType.PLUS, '+', self.position, 1)
+                token = Token(TokenType.PLUS, '+', self.column, self.line)
                 self.tokens_array.append(token)
                 self.advance()
             elif self.current_char == '-':
-                token = Token(TokenType.MINUS, '-', self.position, 1)
+                token = Token(TokenType.MINUS, '-', self.column, self.line)
                 self.tokens_array.append(token)
                 self.advance()
             elif self.current_char == '*':
                 token = self._read_star()
                 self.tokens_array.append(token)
             elif self.current_char == '/':
-                token = Token(TokenType.SLASH, '/', self.position, 1)
+                token = Token(TokenType.SLASH, '/', self.column, self.line)
                 self.tokens_array.append(token)
                 self.advance()
             elif self.current_char == '%':
-                token = Token(TokenType.MOD, '%', self.position, 1)
+                token = Token(TokenType.MOD, '%', self.column, self.line)
                 self.tokens_array.append(token)
             
             #Assign sign and Equal sign
@@ -280,14 +302,15 @@ class Lexer:
             elif self.current_char == "\"" or self.current_char == "\'":
                 token = self._read_string()
                 self.tokens_array.append(token)
-
-        self.tokens_array.append(Token(TokenType.EOF, None, self.position, 1))
-        return self.tokens_array
-
-
-lexer = Lexer("int suma = 10 + 5;")
-print(lexer.get_tokens())  
+            
+            else:
+                self.error_reporter.add_error(LexerError("Stange character", self.line, self.column, bad_char=self.current_char))
+                self.advance()
               
+        self.tokens_array.append(Token(TokenType.EOF, None, 0, 0))
+        return self.tokens_array
+            
+
 
 """
 prototipo 4 mañana parche de errores de indice, cambio de logica.

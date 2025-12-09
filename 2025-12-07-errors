@@ -1,0 +1,140 @@
+[col: 12, line: 5] Carácter ilegal
+[col: 8, line: 10] Falta
+[col: 3, line: 15] Tipos incompatibles
+[col: 1, line: 2] Nombre no encontrado
+[col: 5, line: 20] División por cero
+[col: 5, line: 20] División por cero
+[col: 5, line: 20] División por cero
+[col: 5, line: 20] División por cero
+[col: 5, line: 20] División por cero
+[col: 5, line: 20] División por cero
+[col: 5, line: 20] División por cero
+[col: 5, line: 20] División por cero
+[col: 5, line: 20] División por cero
+[col: 5, line: 20] División por cero
+[col: 5, line: 20] División por cero
+[col: 5, line: 20] División por cero
+[col: 5, line: 20] División por cero
+[col: 5, line: 20] División por cero
+[col: 5, line: 20] División por cero
+[col: 5, line: 20] División por cero
+[col: 12, line: 5][ERROR] Carácter ilegal
+[col: 8, line: 10][ERROR] Falta
+[col: 3, line: 15][ERROR] Tipos incompatibles
+[col: 1, line: 2][ERROR] Nombre no encontrado
+[col: 5, line: 20][ERROR] División por cero
+[col: 5, line: 20][ERROR] División por cero
+[col: 5, line: 20][ERROR] División por cero
+[col: 5, line: 20][ERROR] División por cero
+[col: 5, line: 20][ERROR] División por cero
+[col: 5, line: 20][ERROR] División por cero
+[col: 5, line: 20][ERROR] División por cero
+[col: 5, line: 20][ERROR] División por cero
+[col: 5, line: 20][ERROR] División por cero
+[col: 5, line: 20][ERROR] División por cero
+[col: 5, line: 20][ERROR] División por cero
+[col: 5, line: 20][ERROR] División por cero
+[col: 5, line: 20][ERROR] División por cero
+[col: 5, line: 20][ERROR] División por cero
+[col: 5, line: 20][ERROR] División por cero
+[col: 5, line: 20][ERROR] División por cero
+[col: 12, line: 5][ERROR] [cyan]line: 5, col: 12[/] [bold red]LexerError[/]: Carácter ilegal[yellow] -> '@'[/]
+[col: 8, line: 10][ERROR] [cyan]line: 10, col: 8[/] [bold red]ParserError[/]: Falta[yellow](;) cerca de 'IDENT'[/]
+[col: 3, line: 15][ERROR] [cyan]line: 15, col: 3[/] [bold red]TypeErrorCyLp[/]: Tipos incompatibles[yellow] -> esperado: int, encontrado: str cerca de '+'[/]
+[col: 1, line: 2][ERROR] [cyan]line: 2, col: 1[/] [bold red]NameErrorCyLp[/]: Nombre no encontrado[yellow] -> 'imprimir' no esta definido[/]
+[col: 5, line: 20][ERROR] [cyan]line: 20, col: 5[/] [bold red]RuntimeErrorCyLp[/]: División por cero[yellow] durante operacion: división[/]
+[col: 5, line: 20][ERROR] [cyan]line: 20, col: 5[/] [bold red]RuntimeErrorCyLp[/]: División por cero[yellow] durante operacion: división[/]
+[col: 5, line: 20][ERROR] [cyan]line: 20, col: 5[/] [bold red]RuntimeErrorCyLp[/]: División por cero[yellow] durante operacion: división[/]
+[col: 5, line: 20][ERROR] [cyan]line: 20, col: 5[/] [bold red]RuntimeErrorCyLp[/]: División por cero[yellow] durante operacion: división[/]
+[col: 5, line: 20][ERROR] [cyan]line: 20, col: 5[/] [bold red]RuntimeErrorCyLp[/]: División por cero[yellow] durante operacion: división[/]
+[col: 5, line: 20][ERROR] [cyan]line: 20, col: 5[/] [bold red]RuntimeErrorCyLp[/]: División por cero[yellow] durante operacion: división[/]
+[col: 5, line: 20][ERROR] [cyan]line: 20, col: 5[/] [bold red]RuntimeErrorCyLp[/]: División por cero[yellow] durante operacion: división[/]
+[col: 5, line: 20][ERROR] [cyan]line: 20, col: 5[/] [bold red]RuntimeErrorCyLp[/]: División por cero[yellow] durante operacion: división[/]
+[col: 5, line: 20][ERROR] [cyan]line: 20, col: 5[/] [bold red]RuntimeErrorCyLp[/]: División por cero[yellow] durante operacion: división[/]
+[col: 5, line: 20][ERROR] [cyan]line: 20, col: 5[/] [bold red]RuntimeErrorCyLp[/]: División por cero[yellow] durante operacion: división[/]
+[col: 5, line: 20][ERROR] [cyan]line: 20, col: 5[/] [bold red]RuntimeErrorCyLp[/]: División por cero[yellow] durante operacion: división[/]
+[col: 5, line: 20][ERROR] [cyan]line: 20, col: 5[/] [bold red]RuntimeErrorCyLp[/]: División por cero[yellow] durante operacion: división[/]
+[col: 5, line: 20][ERROR] [cyan]line: 20, col: 5[/] [bold red]RuntimeErrorCyLp[/]: División por cero[yellow] durante operacion: división[/]
+[col: 5, line: 20][ERROR] [cyan]line: 20, col: 5[/] [bold red]RuntimeErrorCyLp[/]: División por cero[yellow] durante operacion: división[/]
+[col: 5, line: 20][ERROR] [cyan]line: 20, col: 5[/] [bold red]RuntimeErrorCyLp[/]: División por cero[yellow] durante operacion: división[/]
+[col: 5, line: 20][ERROR] [cyan]line: 20, col: 5[/] [bold red]RuntimeErrorCyLp[/]: División por cero[yellow] durante operacion: división[/]
+[col: 12, line: 5][ERROR] line: 5, col: 12 LexerError: Carácter ilegal -> '@'
+[col: 8, line: 10][ERROR] line: 10, col: 8 ParserError: Falta(;) cerca de 'IDENT'
+[col: 3, line: 15][ERROR] line: 15, col: 3 TypeErrorCyLp: Tipos incompatibles -> esperado: int, encontrado: str cerca de '+'
+[col: 1, line: 2][ERROR] line: 2, col: 1 NameErrorCyLp: Nombre no encontrado -> 'imprimir' no esta definido
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 12, line: 5][ERROR] line: 5, col: 12 LexerError: Carácter ilegal -> '@'
+[col: 8, line: 10][ERROR] line: 10, col: 8 ParserError: Falta(;) cerca de 'IDENT'
+[col: 3, line: 15][ERROR] line: 15, col: 3 TypeErrorCyLp: Tipos incompatibles -> esperado: int, encontrado: str cerca de '+'
+[col: 1, line: 2][ERROR] line: 2, col: 1 NameErrorCyLp: Nombre no encontrado -> 'imprimir' no esta definido
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[col: 5, line: 20][ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[ERROR] line: 5, col: 12 LexerError: Carácter ilegal -> '@'
+[ERROR] line: 10, col: 8 ParserError: Falta(;) cerca de 'IDENT'
+[ERROR] line: 15, col: 3 TypeErrorCyLp: Tipos incompatibles -> esperado: int, encontrado: str cerca de '+'
+[ERROR] line: 2, col: 1 NameErrorCyLp: Nombre no encontrado -> 'imprimir' no esta definido
+[ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[ERROR] line: 5, col: 12 LexerError: Carácter ilegal -> '@'
+[ERROR] line: 10, col: 8 ParserError: Falta(;) cerca de 'IDENT'
+[ERROR] line: 15, col: 3 TypeErrorCyLp: Tipos incompatibles -> esperado: int, encontrado: str cerca de '+'
+[ERROR] line: 2, col: 1 NameErrorCyLp: Nombre no encontrado -> 'imprimir' no esta definido
+[ERROR] line: 20, col: 5 RuntimeErrorCyLp: División por cero durante operacion: división
+[ERROR] line: 1, col: 11 LexerError: Caracter extraño -> '@'
+[ERROR] line: 1, col: 11 LexerError: Caracter extraño -> '@'
+[ERROR] line: 1, col: 13 LexerError: Strange character -> '==='
+[ERROR] line: 1, col: 11 LexerError: Caracter extraño -> '@'
+[ERROR] line: 1, col: 11 LexerError: Caracter extraño -> '&'
+[ERROR] line: 1, col: 11 LexerError: Caracter extraño -> '&'
+[ERROR] line: 1, col: 13 LexerError: Strange character -> '***'
+[ERROR] line: 1, col: 13 LexerError: Strange character -> '***'
+[ERROR] line: 1, col: 13 LexerError: Strange character -> '***'
+[ERROR] line: 1, col: 13 LexerError: Strange character -> '***'
+[ERROR] line: 1, col: 13 LexerError: Strange character -> '***'
+[ERROR] line: 1, col: 13 LexerError: Strange character -> '***'
+[ERROR] line: 1, col: 13 LexerError: Strange character -> '***'
+[ERROR] line: 1, col: 13 LexerError: Strange character -> '***'
+[ERROR] line: 1, col: 25 LexerError: Strange character -> '\"'
