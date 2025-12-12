@@ -61,7 +61,7 @@ func main(void) -> int:
 
 # Tipos soportados:
 
-# Tipo    # Tipo	Descripción
+## Tipo    ## Tipo Descripción
 `int`         **Entero**
 `float`	      **Decimal**
 `bool`	       **Booleano**
