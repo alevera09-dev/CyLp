@@ -1,5 +1,5 @@
 # CyLp Language Specification  
-### **Version: v0.1 — Draft Completo (Incluye TODO)**
+### **Version: v0.1**
 
 > CyLp es un lenguaje experimental diseñado para ofrecer la familiaridad de C, la flexibilidad y sencillez de Python, y una base sólida para computación de alto rendimiento, machine learning, robótica y programación concurrente moderna.
 
