@@ -168,9 +168,8 @@ func nombre(parametros) -> tipo {
 }
 ```
 
-**func obligatorio**
-**-> tipo obligatorio**
-**return opcional**
+- **-> tipo obligatorio**
+- **return opcional**
 
 ## Ejemplo:
 
