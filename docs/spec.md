@@ -61,16 +61,16 @@ func main(void) -> int:
 
 # Tipos soportados:
 
-`int`: **Entero**
-`float`	      **Decimal**
-`bool`	       **Booleano**
-`str`	        **Cadena UTF-8**
-`array`	      **Arreglo homogéneo**
-`dynamic`	    **Tipo dinámico e inferido**
-`dict<K,V>`	  **Diccionario genérico**
-`void`	       **Sin retorno**
-`null`	       **Puntero nulo**
-`none`	       **Valor vacío seguro**
+- **int: Entero**
+- **float: Decimal**
+- **bool: Booleano**
+- **str: Cadena UTF-8**
+- **array: Arreglo homogéneo**
+- **dynamic: Tipo dinámico e inferido**
+- **dict<K,V>: Diccionario genérico**
+- **void: Sin retorno**
+- **null: Puntero nulo**
+. **none: Valor vacío seguro**
 
 ---
 
