@@ -27,8 +27,6 @@ CyLp se diseña siguiendo estos principios:
 
 CyLp permite **dos estilos sintácticos**:
 
----
-
 ## ✔ A) Estilo C (estándar)
 
 ```c
