@@ -17,11 +17,12 @@ class TokenType(Enum):
     STR = auto()
     PLUS = auto()
     MINUS = auto()
-    MULT = auto()
-    POW = auto()
+    STAR = auto()
+    DOUBLE_STAR = auto()
     SLASH = auto()
     SEMICOLON = auto()
     COLON = auto()
+    COMMENT = auto()
     LPAREN = auto()
     RPAREN = auto()
     LBRACKET = auto()
@@ -47,10 +48,10 @@ class TokenType(Enum):
     EOF = auto()
     
 class Token:
-    def __init__(self, type:TokenType, value, col, line):
+    def __init__(self, type:TokenType, value, column, line):
         self.type = type
         self.value = value
-        self.col = str(col)
+        self.column = str(column)
         self.line = str(line)
         
     def __repr__(self):
@@ -89,7 +90,7 @@ class Lexer:
         self.current_char: str = self.code[self.position] if code else None
         self.tokens_array: list = [] 
         self.code_length: int = len(self.code)
-        
+      
     def advance(self):
         self.position += 1
         self.column += 1
@@ -102,7 +103,24 @@ class Lexer:
             self.current_char = self.code[self.position]
         else:
             self.current_char = None
-        
+    
+    def _read_comments(self):  
+        if self.current_char == "/":
+            while self.position < self.code_length and self.current_char != '\n':
+                self.advance()
+        elif self.current_char == '*':
+            start_comment = [self.line, self.column]
+            while self.position < self.code_length:
+                self.advance()
+                if self.current_char == '*':
+                    self.advance()
+                    if self.current_char == "/":
+                        self.advance()
+                        return
+            self.error_reporter.add_error(LexerError("Multi-line comment not closed; this closure was expected.", start_comment[0], start_comment[1], bad_char="*/"))
+            return None
+                         
+            
     def _read_number(self):
         #Logica para identificar numeros
         start_pos = self.position
@@ -140,16 +158,14 @@ class Lexer:
                 self.advance()
                 if self.position >= self.code_length or self.current_char == ';':
                     self.error_reporter.add_error(LexerError("Strange character", self.line, self.column, bad_char=f"\\{start_quotes}"))
-                    
-                    return None
-                    
-                                             
+                    return None                        
             self.advance()
             
         self.advance()
         temporal_string = self.code[start_pos:self.position]
-        if not temporal_string[0] == start_quotes and temporal_string[-1] == start_quotes:
-            self.logger.log("ERROR", f"A closing quotation mark is missing: {start_quotes}")
+        if temporal_string[0] != start_quotes or temporal_string[-1] != start_quotes:
+            self.error_reporter.add_error(LexerError("A closing quotation mark is missing:", self.line, self.column, bad_char=f"{start_quotes}"))
+            return
         if "\\n" in temporal_string:
             temporal_string = temporal_string.replace("\\n", "\n")
         if "\\t" in temporal_string:
@@ -215,6 +231,12 @@ class Lexer:
     def get_tokens(self):
         while self.position < self.code_length:
             
+            #Comments
+            if self.current_char == '/':
+                self.advance()
+                if self._read_comments() == None:
+                    break
+                
             #Whitespaces and newlines
             if self.current_char.isspace():
                 if self.current_char == '\n':
@@ -269,7 +291,8 @@ class Lexer:
                 self.advance()
             elif self.current_char == '*':
                 token = self._read_star()
-                self.tokens_array.append(token)
+                if token != None:
+                    self.tokens_array.append(token)
             elif self.current_char == '/':
                 token = Token(TokenType.SLASH, '/', self.column, self.line)
                 self.tokens_array.append(token)
@@ -281,27 +304,32 @@ class Lexer:
             #Assign sign and Equal sign
             elif self.current_char == '=':
                 token = self._read_equal()
-                self.tokens_array.append(token)
+                if token != None:
+                    self.tokens_array.append(token)
             
             #Comparison signs, except equal
             elif self.current_char in ['<', '>', '!']:
                 token = self._read_comparison()
-                self.tokens_array.append(token)
+                if token != None:
+                    self.tokens_array.append(token)
             
             #Strings
             elif self.current_char.isdigit():
                 token = self._read_number()
-                self.tokens_array.append(token)
+                if token != None:
+                    self.tokens_array.append(token)
             
             #Identifiers and Keywords
             elif self.current_char.isalpha():
                 token = self._read_ident()
-                self.tokens_array.append(token)
+                if token != None:
+                    self.tokens_array.append(token)
                 
             #Numbers
             elif self.current_char == "\"" or self.current_char == "\'":
                 token = self._read_string()
-                self.tokens_array.append(token)
+                if token != None:
+                    self.tokens_array.append(token)
             
             else:
                 self.error_reporter.add_error(LexerError("Stange character", self.line, self.column, bad_char=self.current_char))

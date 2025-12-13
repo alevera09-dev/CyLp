@@ -62,7 +62,7 @@ class ParserError(CyLpError):
     """Syntax error: the parser expected something different."""
     
     def details(self):
-        return f"({self.expected})" if isinstance(self.expected, str) else '/'.join(self.expected)
+        return f"(Expected: {self.expected}, Get: {self.get})" if isinstance(self.expected, str) else '/'.join(self.expected)
       
         
 class TypeErrorCyLp(CyLpError):
@@ -87,13 +87,13 @@ class RuntimeErrorCyLp(CyLpError):
         
     
 class ErrorReporter:
-    def __init__(self) -> None:
+    def __init__(self, logger:Logger) -> None:
         self.errors: list[CyLpError] = []
         self.panic_mode: bool = False
         self.max_errors: int = 20
         self.console = Console()
         self.log_formatter = FileFormatter()
-        self.logger = Logger()
+        self.logger = logger
     
     def add_error(self, error: CyLpError) -> None:
         if len(self.errors) >= self.max_errors and not self.panic_mode:
